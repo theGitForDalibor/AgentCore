@@ -1,54 +1,32 @@
-# ADR-003: 框架引入策略
+# ADR-003: 外部第三方框架引入策略 (Framework Strategy)
 
-- **状态**：已接受
-- **日期**：2026-08-31
-- **相关**：[Tech Stack](../06-tech-stack.md) · [ADR-001](./ADR-001-runtime-self-build.md) · [Risk Register](../11-risk-register.md)
-
----
-
-## 背景
-
-LangGraph、CrewAI、AutoGen 等框架封装了 Runtime、Planner、Workflow 能力。  
-Jarvis 选择自研（ADR-001），但完全拒绝框架可能错过行业最佳实践对比学习。
+- **状态**：已接受 (Accepted)
+- **日期**：2026-08-31（更新于 2026-10-03）
+- **相关文档**：[ADR-001](./ADR-001-runtime-self-build.md)
 
 ---
 
-## 决策
+## 1. 背景与问题 (Context)
 
-**前期（Phase0–Phase7）不引入 LangGraph、CrewAI、AutoGen。**
-
-**后期（V4 完成后）可按需引入，仅用于**：
-
-1. **对比学习**：与自研 Runtime 行为对比
-2. **参考实现**：Workflow 复杂场景参考 LangGraph
-3. **实验分支**：非 main 分支，不影响自研主线
-
-**禁止**：
-
-- 用框架替代 Phase3–Phase7 的自研实现
-- 在 main 分支直接依赖框架作为核心 Runtime
+尽管 AgentCore 确立了自研运行时的核心方向，但在工业界与开源社区中，诸如 LangGraph、LlamaIndex 等框架仍在不断输出特定领域的设计范式。若完全自我封闭，可能丧失与业界标准方案的对照参考机会。
 
 ---
 
-## 影响
+## 2. 架构决策 (Decision)
 
-**正面**：
+明确界定第三方框架与协议的引入边界：
 
-- Phase0–7 学习路径不被框架干扰
-- 后期可理性评估框架价值
-- 降低 Framework 替代风险
-
-**负面**：
-
-- 无法利用框架加速 V1
-- 后期对比需额外投入
+1. **核心内核严禁依赖重型 Agent 框架**：
+   * `main` 分支的核心模块（`runtime/`, `planner/`, `tools/`, `memory/`, `workflow/`）绝对不直接将 LangChain、LangGraph 或 AutoGen 作为依赖引入。
+2. **开放接纳标准化外部交互协议**：
+   * 支持并积极集成标准化协议（如 Anthropic 主导的 **Model Context Protocol (MCP)**）。通过官方协议桥接外部工具生态，而非依赖专有 SDK。
+3. **隔离实验与对比评估**：
+   * 仅允许在独立的探索分支或 `examples/` 目录下引入框架进行横向基准对照与设计对比，评估自研引擎与商业框架的性能及灵活性差异。
 
 ---
 
-## 未来可能改变
+## 3. 产生的影响 (Consequences)
 
-| 条件 | 决策 |
-|------|------|
-| 自研 Workflow 过于复杂 | 评估 LangGraph 作为 Workflow 后端（新 ADR） |
-| 行业 MCP 标准成熟 | 可能引入官方 MCP SDK（非 Agent 框架） |
-| 团队转向生产交付 | fork `framework-integration` 分支 |
+### 正面收益
+* 保证了 AgentCore 核心内核的纯粹性与极小依赖面，避免了由于外部框架深层依赖冲突导致的破坏性升级。
+* 拥抱 MCP 标准协议，使得 AgentCore 原生具备了与现代 AI 生态（如 Claude Desktop、Cursor MCP servers）互联互通的能力。

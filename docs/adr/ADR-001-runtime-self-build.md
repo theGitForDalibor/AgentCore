@@ -1,48 +1,39 @@
-# ADR-001: Runtime 自研
+# ADR-001: 自研 Agent 核心运行时 (Self-Built Runtime)
 
-- **状态**：已接受
-- **日期**：2026-08-31
-- **相关**：[Tech Stack](../06-tech-stack.md) · [PRD](../01-product-requirements.md) · [Risk Register](../11-risk-register.md)
-
----
-
-## 背景
-
-Agent 生态有 LangGraph、CrewAI、AutoGen 等成熟框架，可快速搭建 Agent。  
-Jarvis 目标是**学习生产级 Runtime 演进**，而非最快交付 Demo。
+- **状态**：已接受 (Accepted)
+- **日期**：2026-08-31（更新于 2026-10-03）
+- **上下文**：AgentCore 架构基础选型
 
 ---
 
-## 决策
+## 1. 背景与问题 (Context)
 
-**采用自研 Runtime**，Phase0–Phase7 不引入上述框架作为核心依赖。
-
-按 Phase 自研：数据结构 → LLM Adapter → Planner → Tool → Loop → Memory → Workflow → MCP。
-
----
-
-## 影响
-
-**正面**：
-
-- 每 Phase 学习目标清晰
-- 架构可控，Diff 可观察
-- 任何 Client 可接入，不受框架约束
-
-**负面**：
-
-- 开发周期更长
-- 需自行处理 Retry、Timeout 等
-- 可能重复造轮子
-
-**缓解**：[ADR-003](./ADR-003-framework-introduction-strategy.md) 定义后期引入策略；[Risk Register](../11-risk-register.md) 约束复杂度。
+当前开源 AI Agent 生态存在大量重量级集成框架（如 LangChain、LangGraph、CrewAI、AutoGen）。这类框架虽然能快速组装 Demo，但在生产实践中存在严重痛点：
+1. **抽象过厚，形成黑盒**：隐藏了底层状态流转、Token 预算裁剪、工具超时与并发合并机制，排查偶发错误极其艰难。
+2. **强框架绑定与版本破碎**：框架 API 演进频繁破坏契约，难以与外部异构系统（如 Java/Go 微服务、CLI、专属 RPC 网关）保持稳定集成。
+3. **无法沉淀真实工程能力**：开发者只学会了调用高阶 DSL，并未掌握 Agent 核心运行时的生命周期本质。
 
 ---
 
-## 未来可能改变
+## 2. 架构决策 (Decision)
 
-| 条件 | 决策 |
-|------|------|
-| V1 完成，学习目标达成 | 可选 LangGraph 对比分支 |
-| 特定模块成本过高 | 单模块改用框架（新 ADR） |
-| 生产交付压力 | fork 分支，main 保持自研 |
+我们决定**自研 AgentCore 运行时核心**，坚持不引入任何重型 Agent 框架作为核心依赖。
+
+自研路径遵循由浅入深的演进模型：
+* **数据契约先行**：基于 Pydantic v2 构建完全类型安全、不可变的消息与状态模型。
+* **显式状态机驱动**：严格定义 9 种确定性运行状态与合法跃迁路径。
+* **自主闭环**：自研 LLM 适配、Tool 注册执行、短期与长期记忆、Context 滑动窗口预算控制。
+* **开放外部标准**：通过支持行业统一的 Model Context Protocol (MCP) 接入生态工具，而不是通过框架插件。
+
+---
+
+## 3. 产生的影响 (Consequences)
+
+### 正面收益
+* **绝对可控与透明**：代码库每一行逻辑清晰可见，排错与性能调优完全白盒化。
+* **极度轻量与高内聚**：核心仅依赖 Pydantic、HTTPX 与 Typer，启动迅速，零隐式网络请求。
+* **真正的微内核**：可作为极简 Python 包嵌入任意现有服务端系统。
+
+### 代价与妥协
+* **初始开发成本较高**：必须自行设计并严格测试超时控制、重试退避、并发合并策略与状态快照恢复。
+* **测试覆盖要求严苛**：必须编写大量单测保障边界安全（当前已积累 142+ 自动化测试用例）。

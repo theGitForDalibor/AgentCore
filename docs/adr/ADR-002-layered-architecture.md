@@ -1,60 +1,39 @@
-# ADR-002: 分层架构
+# ADR-002: 七层分层解耦架构 (Layered Architecture)
 
-- **状态**：已接受
-- **日期**：2026-08-31
-- **相关**：[Architecture](../02-architecture.md) · [Interface Spec](../09-interface-spec.md)
-
----
-
-## 背景
-
-Agent 系统涉及 LLM 调用、规划、工具执行、记忆、工作流、接入等多维能力。  
-若无清晰分层，易出现：
-
-- Runtime 与 Tool 耦合
-- Integration 逻辑渗入核心
-- 难以独立测试与演进
+- **状态**：已接受 (Accepted)
+- **日期**：2026-08-31（更新于 2026-10-03）
+- **相关文档**：[System Architecture Overview](../architecture/overview.md)
 
 ---
 
-## 决策
+## 1. 背景与问题 (Context)
 
-**采用七层分层架构**：
-
-```text
-Application → Runtime → Planning → Execution → Tools → LLM Adapter → Infrastructure
-```
-
-**规则**：
-
-1. 上层依赖下层，下层不感知上层
-2. Runtime 是唯一 orchestrator
-3. Integration（CLI/Web/BAG）仅依赖 Application
-4. 跨层通过 Domain Model + Interface Spec 通信
+Agent 系统是一个横跨大模型交互、多轮记忆、工具反射、工作流编排以及多种通信接口的复杂综合体。
+如果缺乏严格的水平分层约束，极其容易导致：
+* Runtime 内部渗透进特定工具的业务逻辑。
+* 外部客户端（如 CLI 或 Web API）直接操作底层 LLM 请求对象，导致接口耦合。
+* 无法对单点模块（如 Planner 或 MemoryStore）进行独立的单元测试与 Mock 替换。
 
 ---
 
-## 影响
+## 2. 架构决策 (Decision)
 
-**正面**：
+我们决定采用**严格的七层分层架构**：
 
-- 职责清晰，Phase 可逐层引入
-- Tool/Planner 可独立测试
-- BAG 等接入方与核心解耦
+$$\text{Application} \longrightarrow \text{Runtime} \longrightarrow \text{Planning} \longrightarrow \text{Execution} \longrightarrow \text{Tools} \longrightarrow \text{LLM Adapter} \longrightarrow \text{Infrastructure}$$
 
-**负面**：
-
-- 初期分层可能显得「过重」
-- 需要维护 Interface Spec
-
-**缓解**：Phase3 起仅 Runtime 层有代码；随 Phase 渐进填充。
+### 核心约束原则
+1. **单向依赖规则**：上层可以依赖下层，下层严禁反向感知上层。
+2. **面向 Protocol 交互**：跨层契约（如 `Planner`、`Tool`、`MemoryStore`、`WorkflowNode`）全部通过 Python `typing.Protocol` 抽象定义，屏蔽具体实现细节。
+3. **不可变数据载体**：跨层传递的数据全部封装为 `runtime.models` 下的只读不可变模型（`frozen=True`）。
 
 ---
 
-## 未来可能改变
+## 3. 产生的影响 (Consequences)
 
-| 条件 | 决策 |
-|------|------|
-| Workflow 层与 Runtime 边界模糊 | 合并或拆分，新 ADR |
-| MCP 成为 Tool 主要来源 | Tools 层扩展，Architecture 更新 |
-| 性能瓶颈 | 允许层间 shortcut（需 ADR + _benchmark） |
+### 正面收益
+* **独立可测试性**：每一层均可挂载 Mock 驱动（如 `StubLLM`、`InMemoryMemoryStore`、`InMemoryToolRegistry`），测试无需网络 I/O 即可毫秒级运行。
+* **清晰的代码演进路径**：功能扩展界限分明，如接入外部工具只需通过 `MCPToolAdapter` 挂载至 Tools 层，无需修改 Runtime。
+
+### 代价与妥协
+* 初始化时代码层级较多，简单的功能可能需要跨越两到三个层级的接口转换。
