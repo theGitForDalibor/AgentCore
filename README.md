@@ -14,6 +14,10 @@
   <img src="https://img.shields.io/badge/license-TBD-inactive.svg" alt="License" />
 </p>
 
+<p align="center">
+  <a href="README.md"><strong>中文</strong></a> | <a href="README.en.md"><strong>English</strong></a>
+</p>
+
 ---
 
 ## 📖 Overview
