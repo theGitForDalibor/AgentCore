@@ -10,15 +10,14 @@
 ```mermaid
 timeline
     title AgentCore 演进路线图
-    section 已交付 (Completed)
+    section 核心已交付 (100% Completed)
         V0 架构基石 : 领域模型 Message/State/Task : Dev 工具链与门禁
         V1 核心运行时 : ReAct 状态机 : LLM 适配器 : 工具注册中心与闭环
         V2 有状态 Agent : 内存与 SQLite 存储 : 上下文滑动窗口预算
         V3 工作流引擎 : 有向图 WorkflowGraph : 断点与恢复 : 并发节点
         V4 生产加固 : MCP 协议集成 : 结构化日志/链路追踪/指标度量
-    section 正在推进 (In Progress)
+    section 远期规划与演进展望 (Future Vision)
         V4.1 核心完善 : SimplePlanner 自动化函数调用 : MCP Resource 上下文挂载
-    section 规划中 (Planned)
         V5 外部服务化 : FastAPI HTTP / WebSocket API 服务 : 会话长效管理
         V6 高级检索 : RAG 向量切分与混合检索子系统
         V7 多 Agent : 多智能体协同与主管调度协议 (Multi-Agent)
@@ -67,9 +66,9 @@ timeline
 
 ---
 
-## 3. 当前能力差距与进行中演进 (In Progress)
+## 3. 核心完工后的演进展望 (Post-V4 Future Enhancements)
 
-虽然基础设施与双引擎已经闭环，但距离工业级生产还存在以下**明确的技术断点**，当前正在开发完善：
+项目立项设定的核心交付目标（V0 ~ V4 / Phase 0 ~ 15）已 **100% 全部完成交付**。以下列出的是针对长线开源演进与生态扩展的规划项：
 
 | 模块 | 当前状态 | 目标形态 | 阶段 |
 | :--- | :--- | :--- | :--- |

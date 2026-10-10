@@ -228,17 +228,29 @@ uv run pre-commit run --all-files
 
 ## 🗺️ Roadmap & Current Capability Status
 
-| 阶段 | 能力范畴 | 真实状态 |
+> [!TIP]
+> **项目状态**：AgentCore 核心运行时（V0 ～ V4 全量 15 个 Phase）已 **100% 全部完成交付**，并通过全量 142 项自动化测试验证。
+
+### 核心交付物（Core Deliverables — ✅ 100% Completed）
+
+| 阶段 | 能力范畴 | 交付状态 |
 | :--- | :--- | :--- |
 | **V0 Foundation** | 数据模型 (Message/State/Task) · 工程基建 · 代码门禁 | ✅ **Completed** |
 | **V1 Core Runtime**| ReAct 9 状态跃迁机 · LLM 适配器 · 工具注册中心与闭环 | ✅ **Completed** |
 | **V2 Stateful Agent**| 作用域记忆 (MemoryRecord) · SQLite 持久化 · 上下文 Token 预算 | ✅ **Completed** |
 | **V3 Workflow** | 有向图 (WorkflowGraph) · 断点挂起/恢复/回放 · 并发节点 | ✅ **Completed** |
 | **V4 Production** | MCP JSON-RPC 2.0 客户端与适配器 · 结构化日志/链路追踪/指标度量 | ✅ **Completed** |
-| **V4.1 In Progress**| LLM 原生函数调用注入 (`SimplePlanner`) · MCP Resources 上下文关联 | 🟡 **In Progress** |
-| **V5 Planned** | FastAPI HTTP / WebSocket 服务端 · Token 级 SSE 流式推送 | 🔵 **Planned** |
-| **V6 Planned** | 知识库与 RAG 检索子系统 (切分、向量化、混合检索) | 🔵 **Planned** |
-| **V7 Planned** | 多智能体通信协议与主管协调编排 (Multi-Agent Swarm) | 🔵 **Planned** |
+
+### 远期生态演进展望（Extended Ecosystem & Future Vision）
+
+> 以下为核心运行时完工后的长线演进规划，不属于当前内核项目的既定交付物。
+
+| 阶段 | 演进方向 | 规划状态 |
+| :--- | :--- | :--- |
+| **V4.1 Enhancement**| LLM 原生函数调用注入 (`SimplePlanner`) · MCP Resources 上下文关联 | 💡 **Planned Enhancement** |
+| **V5 Gateway** | FastAPI HTTP / WebSocket 服务端 · Token 级 SSE 流式推送 | 💡 **Future Vision** |
+| **V6 Advanced RAG** | 知识库与 RAG 检索子系统 (切分、向量化、混合检索) | 💡 **Future Vision** |
+| **V7 Multi-Agent** | 多智能体通信协议与主管协调编排 (Multi-Agent Swarm) | 💡 **Future Vision** |
 
 完整路线图详见：[Master Evolution Roadmap](docs/roadmap/roadmap.md)。
 

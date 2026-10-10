@@ -228,6 +228,11 @@ uv run pre-commit run --all-files
 
 ## 🗺️ Roadmap & Capability Status
 
+> [!TIP]
+> **Project Status**: AgentCore core runtime (Phases 0 through 15, V0–V4) is **100% completed and verified** with all 142 automated tests passing.
+
+### Core Deliverables (Chartered Milestones — ✅ 100% Completed)
+
 | Phase | Scope | Status |
 | :--- | :--- | :--- |
 | **V0 Foundation** | Domain models (Message/State/Task), dev infra, quality gates | ✅ **Completed** |
@@ -235,10 +240,17 @@ uv run pre-commit run --all-files
 | **V2 Stateful Agent**| Scoped memory (MemoryRecord), SQLite persistence, sliding window budget | ✅ **Completed** |
 | **V3 Workflow** | Directed graph (WorkflowGraph), interrupt/resume/replay, parallel nodes | ✅ **Completed** |
 | **V4 Production** | MCP JSON-RPC 2.0 client & adapter, structured logs, tracing & metrics | ✅ **Completed** |
-| **V4.1 In Progress**| LLM native function call parsing (`SimplePlanner`), MCP resource context linking | 🟡 **In Progress** |
-| **V5 Planned** | FastAPI HTTP / WebSocket API service, SSE streaming responses | 🔵 **Planned** |
-| **V6 Planned** | Knowledge base & RAG retrieval subsystem (chunking, embedding, hybrid search) | 🔵 **Planned** |
-| **V7 Planned** | Multi-agent communication protocols and supervisor orchestration | 🔵 **Planned** |
+
+### Future Ecosystem Vision (Post-V4 Roadmap)
+
+> The following items represent long-term architectural extensions beyond the core runtime charter.
+
+| Phase | Vision Scope | Status |
+| :--- | :--- | :--- |
+| **V4.1 Enhancement** | LLM native function call parsing (`SimplePlanner`), MCP resource context linking | 💡 **Planned Enhancement** |
+| **V5 Gateway** | FastAPI HTTP / WebSocket API service, SSE streaming responses | 💡 **Future Vision** |
+| **V6 Advanced RAG** | Knowledge base & RAG retrieval subsystem (chunking, embedding, hybrid search) | 💡 **Future Vision** |
+| **V7 Multi-Agent** | Multi-agent communication protocols and supervisor orchestration | 💡 **Future Vision** |
 
 For full roadmap details, see: [Master Evolution Roadmap](docs/roadmap/roadmap.md).
 
