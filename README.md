@@ -226,31 +226,38 @@ uv run pre-commit run --all-files
 
 ---
 
-## 🗺️ Roadmap & Current Capability Status
+## 🗺️ Roadmap (演进路线图)
 
-> [!TIP]
-> **项目状态**：AgentCore 核心运行时全部 **5 个里程碑版本 (V0 ～ V4)**、共 **16 个演进阶段 (Phase 0 ～ Phase 15)** 已 **100% 全部完成交付**，并通过全量 142 项自动化测试验证。
+AgentCore 将自主 Agent 运行时的工程演进严格划分为五大版本里程碑与十六个渐进阶段：
 
-| 版本里程碑 | 阶段 (Phase) | 核心技术能力与交付物 | 交付状态 |
-| :--- | :--- | :--- | :---: |
-| <br>**V0 Foundation**<br>*(架构与基础设施)*<br><br> | **Phase 0** Design Gate | 核心架构契约设计、分层规则定义、全套 ADR 架构决策体系 | ✅ Completed |
-| | **Phase 1** Project Skeleton | 模块包骨架构建、uv 项目工程布局、统一入口与空包命名空间 | ✅ Completed |
-| | **Phase 2** Dev Infra | 质量工程门禁（Ruff 静态代码检查、Black 格式化、pre-commit 钩子） | ✅ Completed |
-| | **Phase 3** Runtime Models | 不可变领域模型设计（`Message`、`State`、`Task`，严格基于 Pydantic v2） | ✅ Completed |
-| <br>**V1 Core Runtime**<br>*(核心运行时与 ReAct)*<br><br> | **Phase 4** LLM Adapter | 模型适配层（基于 HTTPX 实现 `OpenAICompatAdapter`，支持同步/异步调用） | ✅ Completed |
-| | **Phase 5** Planner | 规划器协议规范与决策输出模型（`SimplePlanner`，支持 Reply/ToolCall/Clarify） | ✅ Completed |
-| | **Phase 6** Tool Calling | 工具抽象契约、`InMemoryToolRegistry` 注册中心、执行器与不可变 `Observation` | ✅ Completed |
-| | **Phase 7** Runtime Loop | `RuntimeEngine` 显式 9 状态跃迁机，内置指数退避重试、多层超时与敏感工具审批 | ✅ Completed |
-| <br>**V2 Stateful Agent**<br>*(记忆与上下文工程)*<br><br> | **Phase 8** Memory Foundation | 作用域隔离记忆模型 `MemoryRecord`（`SESSION`/`USER`/`GLOBAL` 隔离、TTL 过期淘汰） | ✅ Completed |
-| | **Phase 9** Context Budget | `StandardContextBuilder` 上下文工程，CJK/ASCII 启发式 Token 估算与滑动窗口裁剪 | ✅ Completed |
-| | **Phase 10** Persistence | `SQLiteMemoryStore` 本地存储引擎，实现结构化知识落盘与会话快照持久化恢复 | ✅ Completed |
-| <br>**V3 Workflow**<br>*(有向图编排与并发)*<br><br> | **Phase 11** Workflow Graph | `WorkflowGraph`、函数节点 `FunctionNode` 与条件谓词分支路由 `WorkflowEdge` | ✅ Completed |
-| | **Phase 12** Breakpoints & Replay | `WorkflowEngine` 前置/后置断点挂起 (`interrupt`)、人工干预恢复 (`resume`) 与全时序审计回放 (`replay`) | ✅ Completed |
-| | **Phase 13** Parallel Execution | `ParallelNode` 线程池并发调度、`ParallelToolNode` 工具并发，提供确定性浅合并与命名空间隔离 | ✅ Completed |
-| <br>**V4 Production**<br>*(标准生态与生产加固)*<br><br> | **Phase 14** MCP Integration | Model Context Protocol 原生集成，基于子进程 stdio 的 JSON-RPC 2.0 通信与外部工具自动适配 | ✅ Completed |
-| | **Phase 15** Production Hardening | 集中配置 (`JarvisConfig`)、双模式结构化日志、上下文透传链路追踪 (`Tracer`/`Span`)、指标度量 (`MetricsRegistry`) | ✅ Completed |
+### Completed (已完成)
 
-完整路线图与详细演进历程详见：[Master Evolution Roadmap](docs/roadmap/roadmap.md)。
+#### V0 Foundation (架构与基础设施基石)
+- ✅ **Phase 0: Design Gate**: 架构全景分层设计、概念契约定义、系统质量门禁与全套 ADR 架构决策体系。
+- ✅ **Phase 1: Project Skeleton**: 现代化工程模块包骨架、uv 项目工程布局与模块边界解耦。
+- ✅ **Phase 2: Dev Infrastructure**: 严格工程质量门禁（Ruff 静态检查、Black 格式化、pre-commit 自动化挂载）。
+- ✅ **Phase 3: Runtime Models**: 不可变核心领域模型设计（`Message`、`State`、`Task`，严格基于 Pydantic v2）。
+
+#### V1 Core Runtime (核心运行时与 ReAct 闭环)
+- ✅ **Phase 4: LLM Adapter**: 模型统一适配层（基于 HTTPX 实现 `OpenAICompatAdapter`，支持同步/异步调用与超时控制）。
+- ✅ **Phase 5: Planner**: 规划器协议规范与决策输出模型（`SimplePlanner`，支持 Reply / Tool Call / Clarify 决策）。
+- ✅ **Phase 6: Tool Calling**: 工具抽象契约、`InMemoryToolRegistry` 注册中心、执行器与不可变 `Observation`。
+- ✅ **Phase 7: Runtime Loop**: `RuntimeEngine` 显式 9 状态跃迁机，内置指数退避重试、多层超时保护与人工敏感审批。
+
+#### V2 Stateful Agent (记忆系统与上下文工程)
+- ✅ **Phase 8: Memory Foundation**: 作用域隔离记忆模型 `MemoryRecord`（`SESSION` / `USER` / `GLOBAL` 作用域隔离、TTL 过期清理）。
+- ✅ **Phase 9: Context Engineering**: `StandardContextBuilder` 上下文工程，CJK/ASCII 启发式 Token 估算与滑动窗口裁剪。
+- ✅ **Phase 10: Persistence**: `SQLiteMemoryStore` 本地存储引擎，实现结构化知识落盘与会话快照持久化恢复。
+
+#### V3 Workflow Engine (有向图编排与并发节点)
+- ✅ **Phase 11: Workflow Foundation**: `WorkflowGraph`、函数节点 `FunctionNode` 与条件谓词分支路由 `WorkflowEdge`。
+- ✅ **Phase 12: State Machine Upgrade**: `WorkflowEngine` 支持前置/后置断点挂起 (`interrupt`)、人工干预恢复 (`resume`) 与全时序审计回放 (`replay`)。
+- ✅ **Phase 13: Parallel Execution**: `ParallelNode` 线程池并发调度、`ParallelToolNode` 工具并发，提供确定性浅合并与命名空间合并。
+
+#### V4 Production & Ecosystem (标准生态与生产加固)
+- ✅ **Phase 14: MCP Integration**: Model Context Protocol (MCP) 原生集成，基于子进程 stdio 的 JSON-RPC 2.0 通信与外部工具自动适配。
+- ✅ **Phase 15: Production Hardening**: 集中式配置 (`JarvisConfig`)、双模式结构化日志、上下文透传链路追踪 (`Tracer`/`Span`) 与指标度量 (`MetricsRegistry`)。
+- ✅ **Application Layer: CLI**: 双引擎交互式终端 Typer CLI（`--engine react|workflow`）、零 Key 离线 Mock 演练与多轮会话持久化。
 
 ---
 

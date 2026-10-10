@@ -226,31 +226,38 @@ uv run pre-commit run --all-files
 
 ---
 
-## 🗺️ Roadmap & Capability Status
+## 🗺️ Roadmap
 
-> [!TIP]
-> **Project Status**: AgentCore core runtime across all **5 major milestones (V0–V4)** and **16 evolution phases (Phase 0–Phase 15)** is **100% completed and verified** with all 142 automated tests passing.
+AgentCore strictly partitions the engineering evolution of the agent runtime into five major version milestones and sixteen progressive phases:
 
-| Milestone | Phase | Core Capabilities & Deliverables | Status |
-| :--- | :--- | :--- | :---: |
-| <br>**V0 Foundation**<br>*(Architecture & Infra)*<br><br> | **Phase 0** Design Gate | System layered architecture contracts, ADR decision framework & design specs | ✅ Completed |
-| | **Phase 1** Project Skeleton | Modular package skeleton (uv project management, clean namespace layout) | ✅ Completed |
-| | **Phase 2** Dev Infra | Code quality gates (Ruff linting, Black formatting, pre-commit hooks) | ✅ Completed |
-| | **Phase 3** Runtime Models | Immutable domain models (`Message`, `State`, `Task` based on Pydantic v2) | ✅ Completed |
-| <br>**V1 Core Runtime**<br>*(Core Runtime & ReAct)*<br><br> | **Phase 4** LLM Adapter | Model abstraction layer (`OpenAICompatAdapter` via HTTPX with sync/async support) | ✅ Completed |
-| | **Phase 5** Planner | Planner protocol specification and decision model (`SimplePlanner`: Reply/ToolCall/Clarify) | ✅ Completed |
-| | **Phase 6** Tool Calling | Tool contracts, `InMemoryToolRegistry`, and `ToolExecutor` with immutable observations | ✅ Completed |
-| | **Phase 7** Runtime Loop | `RuntimeEngine` explicit 9-phase state machine with backoff retry, timeouts & human approval | ✅ Completed |
-| <br>**V2 Stateful Agent**<br>*(Memory & Context)*<br><br> | **Phase 8** Memory Foundation | Scoped memory model `MemoryRecord` (`SESSION`/`USER`/`GLOBAL` scopes, TTL expiration) | ✅ Completed |
-| | **Phase 9** Context Budget | `StandardContextBuilder` CJK/ASCII token estimation and sliding window truncation | ✅ Completed |
-| | **Phase 10** Persistence | `SQLiteMemoryStore` local engine for structured persistence & session snapshot recovery | ✅ Completed |
-| <br>**V3 Workflow**<br>*(Graph & Concurrency)*<br><br> | **Phase 11** Workflow Graph | `WorkflowGraph`, `FunctionNode`, and conditional edge routing (`WorkflowEdge`) | ✅ Completed |
-| | **Phase 12** Breakpoints & Replay | `WorkflowEngine` pre/post breakpoints (`interrupt`), human resume, and execution replay | ✅ Completed |
-| | **Phase 13** Parallel Execution | `ParallelNode` thread pool concurrency, `ParallelToolNode`, deterministic shallow & namespaced merge | ✅ Completed |
-| <br>**V4 Production**<br>*(Standards & Hardening)*<br><br> | **Phase 14** MCP Integration | Model Context Protocol integration, stdio JSON-RPC 2.0 client & automatic tool adapter | ✅ Completed |
-| | **Phase 15** Production Hardening | Centralized config (`JarvisConfig`), structured logging, tracer/spans, and metrics registry | ✅ Completed |
+### Completed
 
-For full roadmap and evolution details, see: [Master Evolution Roadmap](docs/roadmap/roadmap.md).
+#### V0 Foundation (Architecture & Infrastructure)
+- ✅ **Phase 0: Design Gate**: Layered architecture specifications, domain abstractions, quality gates, and ADRs.
+- ✅ **Phase 1: Project Skeleton**: Modern package skeleton, uv project configuration, and decoupled module boundaries.
+- ✅ **Phase 2: Dev Infrastructure**: Code quality gates (Ruff linting, Black formatting, pre-commit automation).
+- ✅ **Phase 3: Runtime Models**: Immutable domain models (`Message`, `State`, `Task` based on Pydantic v2).
+
+#### V1 Core Runtime (Core Runtime & ReAct Loop)
+- ✅ **Phase 4: LLM Adapter**: Model abstraction layer (`OpenAICompatAdapter` via HTTPX with sync/async calls & timeout resilience).
+- ✅ **Phase 5: Planner**: Planner protocol specification and decision output model (`SimplePlanner`: Reply / Tool Call / Clarify).
+- ✅ **Phase 6: Tool Calling**: Tool contract specifications, `InMemoryToolRegistry`, and `ToolExecutor` with immutable `Observation`.
+- ✅ **Phase 7: Runtime Loop**: `RuntimeEngine` explicit 9-phase state machine with backoff retry, timeouts & human approval.
+
+#### V2 Stateful Agent (Memory & Context Engineering)
+- ✅ **Phase 8: Memory Foundation**: Scoped memory model `MemoryRecord` (`SESSION` / `USER` / `GLOBAL` scopes, TTL expiration).
+- ✅ **Phase 9: Context Engineering**: `StandardContextBuilder` CJK/ASCII token estimation and sliding window truncation.
+- ✅ **Phase 10: Persistence**: `SQLiteMemoryStore` local engine for structured persistence & session snapshot recovery.
+
+#### V3 Workflow Engine (Graph Orchestration & Parallel Nodes)
+- ✅ **Phase 11: Workflow Foundation**: `WorkflowGraph`, `FunctionNode`, and conditional edge routing (`WorkflowEdge`).
+- ✅ **Phase 12: State Machine Upgrade**: `WorkflowEngine` pre/post breakpoints (`interrupt`), human resume, and replay auditing.
+- ✅ **Phase 13: Parallel Execution**: `ParallelNode` thread pool concurrency, `ParallelToolNode`, deterministic shallow & namespaced merge.
+
+#### V4 Production & Ecosystem (Standards & Hardening)
+- ✅ **Phase 14: MCP Integration**: Model Context Protocol native integration, stdio JSON-RPC 2.0 client & automatic tool adapter.
+- ✅ **Phase 15: Production Hardening**: Centralized configuration (`JarvisConfig`), structured logging, tracer/spans, and metrics registry.
+- ✅ **Application Layer: CLI**: Dual-engine interactive Typer CLI (`--engine react|workflow`), zero-key offline demo, and SQLite multi-turn persistence.
 
 ---
 
